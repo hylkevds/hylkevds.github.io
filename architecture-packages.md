@@ -2,9 +2,9 @@
 
 The FROST-Server comes in three packages, and thus also in three docker images:
 
-* https://hub.docker.com/r/fraunhoferiosb/frost-server/[fraunhoferiosb/frost-server] The all-in-one package
-* https://hub.docker.com/r/fraunhoferiosb/frost-server-http/[fraunhoferiosb/frost-server-http] The HTTP-only package
-* https://hub.docker.com/r/fraunhoferiosb/frost-server-mqtt/[fraunhoferiosb/frost-server-mqtt] The MQTT-only package
+* [fraunhoferiosb/frost-server](https://hub.docker.com/r/fraunhoferiosb/frost-server/) The all-in-one package
+* [fraunhoferiosb/frost-server-http](https://hub.docker.com/r/fraunhoferiosb/frost-server-http/) The HTTP-only package
+* [fraunhoferiosb/frost-server-mqtt](https://hub.docker.com/r/fraunhoferiosb/frost-server-mqtt/) The MQTT-only package
 
 ## All In One
 
