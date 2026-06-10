@@ -1,3 +1,11 @@
+<script type="module">
+	import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+	mermaid.initialize({
+		startOnLoad: true,
+		theme: 'default'
+	});
+</script>
+
 # Package Architecture
 
 The FROST-Server comes in three packages, and thus also in three docker images:
@@ -22,4 +30,97 @@ To make it possible to have multiple HTTP and MQTT instances, a message bus was 
 
 This way, there can be an arbitrary number of HTTP and MQTT components, connecting to the same (replicated) database, and communicating among each other through the message bus. Currently there is only one implementation of the message bus connector, that uses an external MQTT server.
 
+## Code
 
+plain
+
+```
+Datastreams(1)/Observations?$filter=phenomenonTime gt now() sub duration'P1D' mul Datastream/properties/days
+```
+
+xml:
+
+  ```xml
+        <Resource
+            name="jdbc/sensorThings" auth="Container"
+            type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+            url="jdbc:postgresql://localhost:5432/sensorthings"
+            username="sensorthings" password="ChangeMe"
+            maxTotal="20" maxIdle="10" maxWaitMillis="-1"/>
+  ```
+
+command
+    ```wget https://raw.githubusercontent.com/FraunhoferIOSB/FROST-Server/v2.x/scripts/docker-compose.yaml```
+
+js
+
+```javascript
+{
+  "value" : [ {
+      "name" : "Datastreams",
+      "url" : "http://server.de/FROST-Server/v1.0/Datastreams"
+    }, {
+      "name" : "FeaturesOfInterest",
+      "url" : "http://server.de/FROST-Server/v1.0/FeaturesOfInterest"
+    }, {
+    …
+    …
+    }, {
+      "name" : "Things",
+      "url" : "http://server.de/FROST-Server/v1.0/Things"
+    }
+  ]
+}
+```
+
+json
+
+```json
+{
+  "value" : [ {
+      "name" : "Datastreams",
+      "url" : "http://server.de/FROST-Server/v1.0/Datastreams"
+    }, {
+      "name" : "FeaturesOfInterest",
+      "url" : "http://server.de/FROST-Server/v1.0/FeaturesOfInterest"
+    }, {
+    …
+    …
+    }, {
+      "name" : "Things",
+      "url" : "http://server.de/FROST-Server/v1.0/Things"
+    }
+  ]
+}
+```
+
+
+
+## Mermaid test
+
+text
+
+<pre>A non-mermaid PRE</pre>
+
+text
+
+<pre class="mermaid">
+sequenceDiagram
+  participant SensorManager as Sensor Manager
+  participant FROST as FROST-Server
+  participant Connector as LoRaWAN<br>Connector
+
+  SensorManager ->> +FROST: List DeviceModels
+  FROST -->> -SensorManager: Data
+
+  SensorManager ->> +FROST: POST Thing<br/>Links to DeviceModel
+  FROST -->> -SensorManager: @id
+
+  SensorManager ->> +FROST: POST OnboardDevice Task
+  FROST ->> +Connector: POST Task(OnboardDevice, ThingID of Device)
+  FROST -->> -SensorManager: @id
+  Connector -->> Connector: Onboard Device
+  Connector -->> -FROST: Update Task: Done
+</pre>
+
+text
